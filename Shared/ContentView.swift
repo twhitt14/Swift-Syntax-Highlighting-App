@@ -49,7 +49,13 @@ struct ContentView: View {
     }
     
     func highlightText() {
-        viewModel.highlightedText = highlighter.highlight(viewModel.text)
+        viewModel.highlightedText = """
+            <pre>
+            <code>
+            \(highlighter.highlight(viewModel.text))
+            </code>
+            </pre>
+            """
     }
     
     func copyResultText() {
