@@ -22,10 +22,12 @@ struct ContentView: View {
     var body: some View {
         VStack {
             TextEditor(text: $viewModel.text)
+                .border(.tertiary)
                 .overlay {
                     Text(viewModel.text.isEmpty ? "Enter Swift code to begin highlighting" : "")
                         .allowsHitTesting(false)
                 }
+            
             Button {
                 highlightText()
             } label: {
@@ -34,12 +36,25 @@ struct ContentView: View {
             .keyboardShortcut(.return)
 
             TextEditor(text: .constant(viewModel.highlightedText))
+                .border(.tertiary)
+            
+            Button {
+                copyResultText()
+            } label: {
+                Text("Copy Result")
+            }
+            .keyboardShortcut("c")
         }
         .padding()
     }
     
     func highlightText() {
         viewModel.highlightedText = highlighter.highlight(viewModel.text)
+    }
+    
+    func copyResultText() {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(viewModel.highlightedText, forType: .string)
     }
 }
 
