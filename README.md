@@ -18,6 +18,7 @@ own development team (e.g. com.myWebsite.Swift-Syntax-Highlighting-App)
 
 I hope this makes your life easier! If you're generating HTML formatted Swift, 
 don't forget to check out the [Splash](https://github.com/JohnSundell/Splash) repo 
-for instructions on how to update your website CSS so it will format correctly.
+for [instructions](https://github.com/JohnSundell/Splash/blob/master/Examples/sundellsColors.css) on how to update your website CSS so it will highlight your code
+correctly.
 
 Happy highlighting!
