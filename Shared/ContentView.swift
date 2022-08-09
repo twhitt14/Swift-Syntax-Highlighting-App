@@ -23,25 +23,26 @@ enum OutputType: CaseIterable {
 }
 
 class ViewModel: ObservableObject {
-    @Published var outputFormat: OutputType = .html
+    @Published var outputType: OutputType = .html
     @Published var inputText = ""
     @Published var highlightedText: NSAttributedString = .init(string: "")
     
     private var cancellables = Set<AnyCancellable>()
     
     init() {
-        $outputFormat.sink { [weak self] _ in
-            self?.highlightText()
+        $outputType.sink { [weak self] outputType in
+            // need to use value from sink closure instead of `outputType` property or we can get out of sync
+            self?.highlightText(outputType: outputType)
         }.store(in: &cancellables)
     }
     
-    func highlightText() {
+    func highlightText(outputType: OutputType? = nil) {
         guard !inputText.isEmpty else {
             highlightedText = .init(string: "")
             return
         }
         
-        switch outputFormat {
+        switch outputType ?? self.outputType {
         case .attributedString:
             let highlighter = SyntaxHighlighter(format: AttributedStringOutputFormat(theme: .midnight(withFont: .init(size: 12))))
             highlightedText = highlighter.highlight(inputText)
@@ -66,7 +67,7 @@ struct ContentView: View {
     var body: some View {
         VStack {
             HStack {
-                Picker("Syntax type", selection: $viewModel.outputFormat) {
+                Picker("Syntax type", selection: $viewModel.outputType) {
                     ForEach(OutputType.allCases, id: \.self) {
                         Text($0.description)
                     }
@@ -91,15 +92,13 @@ struct ContentView: View {
             }
             .keyboardShortcut(.return)
 
-            switch viewModel.outputFormat {
-            case .html:
-                TextEditor(text: .constant(viewModel.highlightedText.string))
-                    .border(.tertiary)
-                
-            case .attributedString:
+            ScrollView {
                 Text(AttributedString(viewModel.highlightedText))
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .textSelection(.enabled)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
             }
+            .border(.tertiary)
             
             Button {
                 copyResultText()
