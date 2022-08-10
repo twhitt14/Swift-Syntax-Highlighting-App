@@ -1,6 +1,6 @@
 # Swift Syntax Highlighting App
 
-This app is a simple UI wrapper around [Splash](https://github.com/JohnSundell/Splash) 
+This app is a simple UI wrapper around [Splash][1] 
 so most of the credit goes to John Sundell for building our engine.
 
 I post every few weeks on my blog [www.theSwift.dev](https://www.theswift.dev) and often 
@@ -17,8 +17,10 @@ devices) and you should change the bundle identifier so that it reflects your
 own development team (e.g. com.myWebsite.Swift-Syntax-Highlighting-App)
 
 I hope this makes your life easier! If you're generating HTML formatted Swift, 
-don't forget to check out the [Splash](https://github.com/JohnSundell/Splash) repo 
+don't forget to check out the [Splash][1] repo 
 for instructions on how to update your [website CSS](https://github.com/JohnSundell/Splash/blob/master/Examples/sundellsColors.css) so it will highlight your code
 correctly.
 
 Happy highlighting!
+
+[1]: https://github.com/JohnSundell/Splash
