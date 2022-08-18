@@ -1,6 +1,6 @@
 # Swift Syntax Highlighting App
 
-This app is UI wrapper around [Splash][1] 
+This app is a UI wrapper around [Splash][1] 
 so most of the credit goes to John Sundell for building our engine.
 
 I post every few weeks on my blog [www.theSwift.dev](https://www.theswift.dev) and often 
