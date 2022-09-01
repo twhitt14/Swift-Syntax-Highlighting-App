@@ -117,7 +117,6 @@ struct ContentView: View {
     func copyResultText() {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.writeObjects([viewModel.highlightedText])
-//            .setString(viewModel.highlightedText, forType: .string)
     }
 }
 
