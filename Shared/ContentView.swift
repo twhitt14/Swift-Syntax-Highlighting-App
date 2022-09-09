@@ -23,9 +23,13 @@ enum OutputType: CaseIterable {
 }
 
 class ViewModel: ObservableObject {
+    
     @Published var outputType: OutputType = .html
     @Published var inputText = ""
     @Published var highlightedText: NSAttributedString = .init(string: "")
+    @Published var isShowingCopiedMessage = false
+    
+    private var copyMessageTimer: Timer?
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -58,6 +62,19 @@ class ViewModel: ObservableObject {
             highlightedText = .init(string: highlightedTextWithCodeTags)
         }
     }
+    
+    func copyResultText() {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.writeObjects([highlightedText])
+        isShowingCopiedMessage = true
+        
+        copyMessageTimer?.invalidate()
+        let timer = Timer(timeInterval: 1, repeats: false, block: { _ in
+            self.isShowingCopiedMessage = false
+        })
+        copyMessageTimer = timer
+        RunLoop.current.add(timer, forMode: .common)
+    }
 }
 
 struct ContentView: View {
@@ -86,7 +103,7 @@ struct ContentView: View {
                 }
             
             Button {
-                highlightText()
+                viewModel.highlightText()
             } label: {
                 Text("Highlight (⌘ + enter)")
             }
@@ -101,22 +118,14 @@ struct ContentView: View {
             .border(.tertiary)
             
             Button {
-                copyResultText()
+                viewModel.copyResultText()
             } label: {
-                Text("Copy Result (shift + ⌘ + c)")
+                Text(viewModel.isShowingCopiedMessage ? "Copied!" : "Copy Result (shift + ⌘ + c)")
             }
             .keyboardShortcut("c", modifiers: [.command, .shift])
+            .animation(.default, value: viewModel.isShowingCopiedMessage)
         }
         .padding()
-    }
-    
-    func highlightText() {
-        viewModel.highlightText()
-    }
-    
-    func copyResultText() {
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.writeObjects([viewModel.highlightedText])
     }
 }
 
